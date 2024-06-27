@@ -19,6 +19,8 @@
     --green_color3: #4d6e4d;
     --green_shadow: rgba(216, 254, 215, 0.2);
 
+    --zzz: #EEEBDD;
+
 }
 
 
@@ -32,12 +34,61 @@
     top: calc(50% + 20px);
 }
 
+.main.stretch::before{
+    content: '';
+    position: absolute;
+    border: 8px solid #EEEBDD;
+    border-radius: 5px;
+    width: 100px;
+    height: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 55px;
+    border-top: transparent;
+    outline: 4px solid #f08000;
+    animation-name: stretch;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+}
+
+.main.muscle::before{
+    content: '';
+    position: absolute;
+    border: 8px solid #EEEBDD;
+    border-radius: 5px;
+    width: 100px;
+    height: 10px;
+    left: -28px;
+    top: 55px;
+    border-top: transparent;
+}
+
+.main.muscle::after{
+    content: '';
+    position: absolute;
+    display: block;
+    width: 105px;
+    height: 100px;
+    margin: 0 auto;
+    left: -46%;
+    top: -48px;
+    border: 5px white solid;
+    border-bottom: none;
+    border-radius: 50% 50% 0 0;
+    animation: swing 1500ms infinite linear;
+    transform-origin: bottom;
+    content: "";
+    
+}
+
 .shadows {
     position: absolute;
     width: 95px;
     height: 60px;
     border-radius: 100%;
-    background: #4D6E4D;
+    background: #181818;
     left: calc(10% - 47.5px);
     top: calc(50% + 55px);
 }
@@ -162,6 +213,13 @@
     bottom: 0;
     border-radius: 50%;
     background: black;
+}
+
+
+.eye.sleep::before {
+    width: 15px;
+    height: 3px;
+    border-radius: 0;
 }
 
 /* .eye::after {
