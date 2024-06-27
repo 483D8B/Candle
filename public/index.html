@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+
+        body {
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            background: #5D7B5D;
+        }
+
+
+        #main {
+            position: absolute;
+            width: 120px;
+            height: 240px;
+            background: #EEEBDD;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: calc(50% + 40px);
+        }
+
+        #shadows {
+            position: absolute;
+            width: 190px;
+            height: 120px;
+            border-radius: 100%;
+            background: #4D6E4D;
+            left: calc(50% - 95px);
+            top: calc(50% + 110px);
+        }
+
+        #shadows::after {
+            content: '';
+            position: absolute;
+            --after-background: none;
+            background: var(--after-background);
+            width: 200px;
+            height: 200px;
+            border-radius: 100%;
+            left: -10px;
+            top: -350px;
+            animation: shadow-anim 2s ease infinite;
+        }
+
+        #details {
+            background: radial-gradient(40px 20px at 50% 50%, #D6D5CD 50%, #E1DFD3 50%);
+            width: 120px;
+            height: 80px;
+            border-radius: 100%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: calc(50% - 80px);
+            box-shadow: 0 240px 0 0 #EEEBDD;
+        }
+
+        #details::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 30px;
+            background: #564930;
+            top: calc(50% - 30px);
+            left: calc(50% - 2.5px);
+            border-radius: 50px;
+            box-shadow: 15px -10px 0 0 rgba(0, 0, 0, 0.05);
+        }
+
+        #candle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 0 50% 50%;
+            transform: rotate(45deg);
+            left: calc(50% - 15px);
+            top: calc(50% - 130px);
+            animation: candle-anim 2s ease infinite;
+            box-shadow: none;
+            background: none;
+        }
+
+        #candle.lit {
+            box-shadow: none;
+            box-shadow: -6px -6px 0 10px #FFB319, -14px -14px 0 20px #F88F01, -8px -28px 0 20px rgba(0, 0, 0, 0.1);
+            background: #FFE194;
+        }
+
+        #shadows.lit::after {
+            --after-background: rgba(255, 239, 161, 0.2);
+        }
+
+
+        @keyframes candle-anim {
+            0% {
+                transform: scale(1) rotate(45deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(45deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(45deg);
+            }
+        }
+
+        @keyframes shadow-anim {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .eye {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: calc(50% - 20px);
+            top: calc(50% - 10px);
+            background: #EEEBDD;
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .eye.eye-2 {
+            left: calc(50% + 20px);
+        }
+
+        .eye::before {
+            content: '';
+            position: absolute;
+            margin: auto;
+            width: 10px;
+            height: 10px;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: black;
+        }
+
+        .mouth::before {
+            content: '';
+            position: absolute;
+            margin: auto;
+            width: 50px;
+            height: 5px;
+            left: 0;
+            right: 0;
+            top: 20px;
+            bottom: 0;
+            background: black;
+        }
+
+        .mouth::after {
+            content: '';
+            position: absolute;
+            margin: auto;
+            top: 40px;
+            bottom: 0;
+            width: 50px;
+            height: 25px;
+            border-radius: 5px 5px 60px 60px;
+            --after-background: none;
+            background: var(--after-background);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mouth.happy::after {
+            --after-background: #191F45;
+        }
+    </style>
+</head>
+
+<body>
+
+        <div id="shadows"></div>
+        <div id="main"></div>
+        <div id="details"></div>
+        <div id="candle"></div>
+    
+        <div class="eye"></div>
+        <div class="eye eye-2"></div>
+        <div class="mouth"></div>
+
+
+
+
+    <script>
+
+ document.addEventListener('DOMContentLoaded', (event) => {
+  fetch('/candle-state')
+    .then(response => response.text())
+    .then(state => {
+      const candleElement = document.getElementById('candle');
+      const shadowsElement = document.querySelector('#shadows');
+      const mouthElement = document.querySelector('.mouth');
+      const today = new Date().toISOString().split('T')[0];
+
+      // If the state matches today's date, add the 'click' and 'after-click' classes
+      if (state === today) {
+        candleElement.classList.add('lit');
+        shadowsElement.classList.add('lit');
+        mouthElement.classList.add('happy');
+      }
+    });
+
+  document.querySelector('#main').addEventListener('click', function () {
+    var candleElement = document.getElementById('candle');
+    var shadowsElement = document.querySelector('#shadows');
+    var mouthElement = document.querySelector('.mouth');
+
+    // Toggle the 'click' class and update the server state
+    if (!candleElement.classList.contains('lit')) {
+      fetch('/light-candle', { method: 'POST' })
+        .then(response => response.text())
+        .then(() => {
+          candleElement.classList.add('lit');
+          shadowsElement.classList.add('lit');
+          mouthElement.classList.add('happy');
+        });
+    }
+  });
+});
+
+
+    </script>
+
+
+</body>
+
+</html>
