@@ -133,14 +133,17 @@
     </div>
 <script>
 
+
+let path = 'https://483d8b.pythonanywhere.com'
+
 window.addEventListener('DOMContentLoaded', (event) => {
     let gridStates = []; // Store grid states locally
 
     // Function to fetch initial candle and grid states
     function fetchInitialStates() {
         return Promise.all([
-            fetch('/api/candle_states').then(response => response.json()),
-            fetch('/api/grid_states').then(response => {
+            fetch(path+'/api/candle_states').then(response => response.json()),
+            fetch(path+'/api/grid_states').then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
