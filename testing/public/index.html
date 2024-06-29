@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="candle_relative.css">
+    <link rel="shortcut icon" href="#">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+        @import url('https://fonts.cdnfonts.com/css/herculanum-lt-pro');
+
+        body {
+            background: #5D7B5D;
+            padding-top: 5em;
+            padding-bottom: 5em;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 8em;
+        }
+
+        .box {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: start;
+            gap: 5em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 3vw);
+            gap: 0.5em;
+        }
+
+        .cell {
+            aspect-ratio: 1/1;
+            border: 2px solid black;
+        }
+
+        .test {
+            position: relative;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+        .title {
+            display: block;
+            font-size: 3em;
+            font-family: 'Herculanum LT Pro', sans-serif;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: -2.5em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="container"></div>
+
+    <script>
+        const activities = [
+            { title: 'Japanese' },
+            { title: 'Stretching' },
+            { title: 'Exercise' },
+            { title: 'Sleep routine' },
+            { title: 'Reading' }
+        ];
+
+        // Function to create each activity section dynamically
+        function createActivitySection(title, index) {
+            const div = document.createElement('div');
+            div.className = 'box';
+
+            const gridDiv = document.createElement('div');
+            gridDiv.className = 'grid';
+            gridDiv.id = 'grid' + (index + 1);
+
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test';
+
+            const shadowsDiv = document.createElement('div');
+            shadowsDiv.className = 'shadows';
+
+            const mainDiv = document.createElement('div');
+            mainDiv.className = 'main';
+            mainDiv.setAttribute('data-index', '0');
+
+            const detailsDiv = document.createElement('div');
+            detailsDiv.className = 'details';
+
+            const candleDiv = document.createElement('div');
+            candleDiv.className = 'candle';
+
+            const eyeDiv1 = document.createElement('div');
+            eyeDiv1.className = 'eye';
+
+            const eyeDiv2 = document.createElement('div');
+            eyeDiv2.className = 'eye eye-2';
+
+            const mouthDiv = document.createElement('div');
+            mouthDiv.className = 'mouth';
+
+            testDiv.appendChild(shadowsDiv);
+            testDiv.appendChild(mainDiv);
+            testDiv.appendChild(detailsDiv);
+            testDiv.appendChild(candleDiv);
+            testDiv.appendChild(eyeDiv1);
+            testDiv.appendChild(eyeDiv2);
+            testDiv.appendChild(mouthDiv);
+
+            div.appendChild(gridDiv);
+            div.appendChild(testDiv);
+
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'title';
+            titleDiv.textContent = title;
+
+            const container = document.getElementById('container');
+            container.appendChild(titleDiv);
+            container.appendChild(div);
+        }
+
+        // Loop through activities array to create sections
+        activities.forEach((activity, index) => {
+            createActivitySection(activity.title, index);
+        });
+
+        // Function to handle click event on .main elements
+        function handleClick(event) {
+            var candleElement = event.target.closest('.test').querySelector('.candle');
+            var shadowsElement = event.target.closest('.test').querySelector('.shadows');
+            var mouthElement = event.target.closest('.test').querySelector('.mouth');
+
+            var isLit = candleElement.classList.contains('lit');
+
+            if (isLit) {
+                candleElement.classList.remove('lit');
+                shadowsElement.classList.remove('lit');
+                mouthElement.classList.remove('happy');
+            } else {
+                candleElement.classList.add('lit');
+                shadowsElement.classList.add('lit');
+                mouthElement.classList.add('happy');
+
+                // Change the background color of the next cell only when lighting the candle
+                var index = parseInt(event.target.getAttribute('data-index'), 10);
+                var grid = event.target.closest('.box').querySelector('.grid');
+                var cells = grid.querySelectorAll('.cell');
+
+                if (index < cells.length) {
+                    cells[index].style.backgroundColor = 'gold';
+                    event.target.setAttribute('data-index', index + 1);
+                }
+            }
+        }
+
+
+
+        // Add event listeners to all .main elements
+        document.querySelectorAll('.main').forEach(function (mainElement) {
+            mainElement.addEventListener('click', handleClick);
+        });
+
+        // Function to create grid cells
+        function createDivs() {
+            const grids = document.querySelectorAll('.grid');
+            grids.forEach((grid) => {
+                for (let i = 0; i < 100; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'cell';
+                    grid.appendChild(div);
+                }
+            });
+        }
+
+        createDivs();
+    </script>
+
+
+</body>
+
+</html>

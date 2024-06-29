@@ -1,0 +1,170 @@
+        .main4 {
+            position: absolute;
+            width: 60px;
+            height: 120px;
+            background: #EEEBDD;
+            transform: translate(-50%, -50%);
+            left: 70%;
+            top: calc(80% + 20px);
+        }
+
+        .shadows4 {
+            position: absolute;
+            width: 95px;
+            height: 60px;
+            border-radius: 100%;
+            background: #4D6E4D;
+            left: calc(70% - 47.5px);
+            top: calc(80% + 55px);
+        }
+
+        .shadows4::after {
+            content: '';
+            position: absolute;
+            --after-background: rgba(255, 239, 161, 0.2);
+            background: var(--after-background);
+            width: 100px;
+            height: 100px;
+            border-radius: 100%;
+            left: -2px;
+            top: -175px;
+            animation: shadow-anim 2s ease infinite;
+        }
+
+        .details4 {
+            background: radial-gradient(20px 10px at 50% 50%, #D6D5CD 50%, #E1DFD3 50%);
+            width: 60px;
+            height: 40px;
+            border-radius: 100%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 70%;
+            top: calc(80% - 40px);
+            box-shadow: 0 120px 0 0 #EEEBDD;
+        }
+
+        .details4::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 30px;
+            background: #564930;
+            top: calc(50% - 30px);
+            left: calc(50% - 2.5px);
+            border-radius: 50px;
+            box-shadow: 7.5px -5px 0 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .candle4 {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 0 50% 50%;
+            transform: rotate(45deg);
+            background: #FFE194;
+            left: calc(70% - 7.5px);
+            top: calc(80% - 65px);
+            box-shadow: -3px -3px 0 5px #FFB319, -7px -7px 0 10px #F88F01, -4px -14px 0 10px rgba(0, 0, 0, 0.1);
+            animation: candle-anim 2s ease infinite;
+        }
+
+        .candle4.click {
+            box-shadow: none;
+            background: none;
+        }
+
+        .shadows4.after-click::after {
+            --after-background: none;
+        }
+
+
+        @keyframes candle-anim {
+            0% {
+                transform: scale(1) rotate(45deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(45deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(45deg);
+            }
+        }
+
+        @keyframes shadow-anim {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .eye4 {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: calc(70% - 20px);
+            top: calc(80% - 10px);
+            background: #EEEBDD;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .eye4.eye-2_4 {
+            left: calc(70% + 20px);
+        }
+
+        .eye4::before {
+            content: '';
+            position: absolute;
+            margin: auto;
+            width: 10px;
+            height: 10px;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: black;
+        }
+
+        .mouth4::before {
+            content: '';
+            position: absolute;
+            margin: auto;
+            width: 50px;
+            height: 5px;
+            left: 70%;
+			top: calc(66% - 30px);
+            bottom: 0;
+            background: black;
+			transform: translateX(-50%);
+        }
+
+        .mouth4::after {
+            content: '';
+            position: absolute;
+            margin: auto;
+            top: calc(66% - 10px);
+            bottom: 0;
+            width: 50px;
+            height: 25px;
+            border-radius: 5px 5px 60px 60px;
+            --after-background: #191F45;
+            background: var(--after-background);
+            left: 70%;
+            transform: translateX(-50%);
+        }
+
+        .mouth4.after-click::after {
+            --after-background: none;
+        }

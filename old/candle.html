@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<link rel="stylesheet" href="candle1.css">
+	<link rel="stylesheet" href="candle2.css">
+	<link rel="stylesheet" href="candle3.css">
+	<link rel="stylesheet" href="candle4.css">
+	<link rel="stylesheet" href="candle5.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+		
+		body {
+            background: #5D7B5D;
+            padding: 1em;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            border: 2px solid red;
+        }
+
+        .box {
+            display: flex;
+            gap: 1em;
+			justify-content: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1vw);
+            gap: 1vw;
+
+        }
+
+        .cell {
+            aspect-ratio: 1/1;
+            border: 1px solid black;
+            background-color: gold;
+        }
+
+		#grid4,#grid5{
+			background-color: red;
+		}
+
+		.test{
+			display: inline-block;
+			border: 2px solid blue;
+		}
+    </style>
+</head>
+
+<body>
+
+
+	
+    <div class="container">
+        <div class="box">
+            <div class="grid" id="grid1"></div>
+            <div class="grid" id="grid2"></div>
+            <div class="grid" id="grid3"></div>
+        </div>
+        <div class="box">
+            <div class="grid" id="grid4"></div>
+            <div class="grid" id="grid5"></div>
+        </div>
+    </div>
+
+	<div class="test">
+		<div class="shadows"></div>
+		<div class="main"></div>
+		<div class="details"></div>
+		<div class="candle"></div>
+	
+		<div class="eye"></div>
+		<div class="eye eye-2"></div>
+		<div class="mouth"></div>
+
+	</div>
+	
+	<div class="shadows2"></div>
+    <div class="main2"></div>
+    <div class="details2"></div>
+    <div class="candle2"></div>
+
+    <div class="eye2"></div>
+    <div class="eye2 eye-2_2"></div>
+    <div class="mouth2"></div>
+	
+	<div class="shadows3"></div>
+    <div class="main3"></div>
+    <div class="details3"></div>
+    <div class="candle3"></div>
+
+    <div class="eye3"></div>
+    <div class="eye3 eye-2_3"></div>
+    <div class="mouth3"></div>
+
+	<div class="shadows4"></div>
+    <div class="main4"></div>
+    <div class="details4"></div>
+    <div class="candle4"></div>
+
+    <div class="eye4"></div>
+    <div class="eye4 eye-2_4"></div>
+    <div class="mouth4"></div>
+	
+	<div class="shadows5"></div>
+    <div class="main5"></div>
+    <div class="details5"></div>
+    <div class="candle5"></div>
+
+    <div class="eye5"></div>
+    <div class="eye5 eye-2_5"></div>
+    <div class="mouth5"></div>
+
+
+    <script>
+        document.querySelector('.main').addEventListener('click', function () {
+            var candleElement = document.querySelector('.candle');
+            var shadowsElement = document.querySelector('.shadows');
+            var mouthElement = document.querySelector('.mouth');
+            if (candleElement.classList.contains('click')) {
+                candleElement.classList.remove('click');
+            } else {
+                candleElement.classList.add('click');
+            }
+            if (shadowsElement.classList.contains('after-click')) {
+                shadowsElement.classList.remove('after-click');
+            } else {
+                shadowsElement.classList.add('after-click');
+            }
+            if (mouthElement.classList.contains('after-click')) {
+                mouthElement.classList.remove('after-click');
+            } else {
+                mouthElement.classList.add('after-click');
+            }
+        });
+	
+		function createDivs() {
+            const grids = document.querySelectorAll('.grid');
+            grids.forEach((grid, index) => {
+                for (let i = 0; i < 100; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'cell';
+                    grid.appendChild(div);
+                }
+            });
+        }
+		
+		createDivs();
+
+
+    </script>
+
+
+</body>
+
+</html>
