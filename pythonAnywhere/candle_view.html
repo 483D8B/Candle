@@ -131,72 +131,98 @@
             </div>
         </div>
     </div>
+<script>
 
+window.addEventListener('DOMContentLoaded', (event) => {
+    let gridStates = []; // Store grid states locally
 
-    <script>
-        document.querySelectorAll('.main').forEach(function (mainElement) {
-            
-            mainElement.addEventListener('click', function () {
-                var candleElement = mainElement.closest('.test').querySelector('.candle');
-                var shadowsElement = mainElement.closest('.test').querySelector('.shadows');
-                var mouthElement = mainElement.closest('.test').querySelector('.mouth');
-                toggleGridOpacity(mainElement);
-                var isLit = candleElement.classList.contains('lit');
-                if (isLit) {
-                    candleElement.classList.remove('lit');
-                    shadowsElement.classList.remove('lit');
-                    mouthElement.classList.remove('happy');
-                } else {
+    // Function to fetch initial candle and grid states
+    function fetchInitialStates() {
+        return Promise.all([
+            fetch('/api/candle_states').then(response => response.json()),
+            fetch('/api/grid_states').then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+        ])
+        .then(([candleData, gridData]) => {
+            // Store grid states locally for easy access
+            gridStates = gridData.grid_states;
+
+            // Process each test element
+            document.querySelectorAll('.test').forEach(function(testElement) {
+                const mainElement = testElement.querySelector('.main');
+                const candleElement = testElement.querySelector('.candle');
+                const shadowsElement = testElement.querySelector('.shadows');
+                const mouthElement = testElement.querySelector('.mouth');
+                const gridId = testElement.parentElement.querySelector('.grid').id;
+
+                // Set initial candle state
+                const candleState = candleData.candle_states.find(candle => candle.id === gridId);
+                if (candleState && candleState.is_lit) {
                     candleElement.classList.add('lit');
                     shadowsElement.classList.add('lit');
                     mouthElement.classList.add('happy');
+                }
 
-                    // Change the background color of the next cell only when lighting the candle
-                    var box = mainElement.closest('.box');
-                    var grid = box.querySelector('.grid');
-                    var cells = grid.querySelectorAll('.cell');
-                    var index = parseInt(mainElement.getAttribute('data-index'), 10);
-
-                    if (index < cells.length) {
-                        cells[index].style.backgroundColor = 'gold';
-                        mainElement.setAttribute('data-index', index + 1);
+                // Set initial grid state
+                const gridState = gridStates.find(grid => grid.id === gridId);
+                if (gridState) {
+                    const coloredCells = gridState.colored_cells;
+                    const gridElement = testElement.parentElement.querySelector('.grid');
+                    const cells = gridElement.querySelectorAll('.cell');
+                    for (let i = 0; i < coloredCells; i++) {
+                        if (cells[i]) {
+                            cells[i].style.backgroundColor = 'gold';
+                        }
                     }
                 }
+
+                // Toggle grid opacity
+                toggleGridOpacity(testElement.parentElement);
             });
-        });
+        })
+        .catch(error => console.error('Error fetching initial states:', error));
+    }
 
-        function createDivs() {
-            const grids = document.querySelectorAll('.grid');
-            grids.forEach((grid) => {
-                for (let i = 0; i < 100; i++) {
-                    const div = document.createElement('div');
-                    div.className = 'cell';
-                    grid.appendChild(div);
-                }
-            });
+    // Fetch initial states when DOM content is loaded
+    fetchInitialStates();
+
+    // Create grid cells when DOM content is loaded
+    createDivs();
+});
+
+// Function to create grid cells
+function createDivs() {
+    const grids = document.querySelectorAll('.grid');
+    grids.forEach((grid) => {
+        for (let i = 0; i < 100; i++) {
+            const div = document.createElement('div');
+            div.className = 'cell';
+            grid.appendChild(div);
         }
+    });
+}
 
-        createDivs();
+// Function to toggle grid opacity
+function toggleGridOpacity(boxElement) {
+    // Find the .grid within the .box
+    var gridElement = boxElement.querySelector('.grid');
 
-        function toggleGridOpacity(mainElement) {
-            // Find the closest parent .box
-            var parentBox = mainElement.closest('.box');
+    // Find the .candle within the .box
+    var candleElement = boxElement.querySelector('.candle');
 
-            // Find the .grid within the parent .box
-            var gridElement = parentBox.querySelector('.grid');
-
-            // Find the .candle within the parent .box
-            var candleElement = parentBox.querySelector('.candle');
-
-            // Check if the .candle has the 'lit' class
-            if (candleElement.classList.contains('lit')) {
-                // If the .candle is 'lit', set the .grid opacity to 1
-                gridElement.style.opacity = '0.02';
-            } else {
-                // If the .candle is not 'lit', set the .grid opacity to 0.05
-                gridElement.style.opacity = '1';
-            }
-        }
+    // Check if the .candle has the 'lit' class
+    if (candleElement.classList.contains('lit')) {
+        // If the .candle is 'lit', set the .grid opacity to 1
+        gridElement.style.opacity = '1';
+    } else {
+        // If the .candle is not 'lit', set the .grid opacity to 0.02
+        gridElement.style.opacity = '0.02';
+    }
+}
 
     </script>
 

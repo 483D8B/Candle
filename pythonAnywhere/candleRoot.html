@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="candle_relative.css">
+    <link rel="shortcut icon" href="#">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+        @import url('https://fonts.cdnfonts.com/css/herculanum-lt-pro');
+
+        body {
+            background: #222;
+            padding-top: 5em;
+            padding-bottom: 5em;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 8em;
+        }
+
+        .box {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: start;
+            gap: 5em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 3vw);
+            gap: 0.5em;
+            opacity: 0.02;
+        }
+
+        .cell {
+            aspect-ratio: 1/1;
+            border: 2px solid #EEEBDD;
+        }
+
+        .test {
+            position: relative;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+        .title {
+            display: block;
+            font-size: 3em;
+            font-family: 'Herculanum LT Pro', sans-serif;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: -2.5em;
+            color: #EEEBDD;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="title">Japanese</div>
+        <div class="box">
+            <div class="grid" id="grid1"></div>
+            <div class="test">
+                <div class="shadows"></div>
+                <div class="main" data-index="0"></div>
+                <div class="details"></div>
+                <div class="candle"></div>
+                <div class="eye"></div>
+                <div class="eye eye-2"></div>
+                <div class="mouth"></div>
+            </div>
+        </div>
+        <div class="title">Stretching</div>
+        <div class="box">
+            <div class="grid" id="grid2"></div>
+            <div class="test">
+                <div class="shadows"></div>
+                <div class="main" data-index="0"></div>
+                <div class="details"></div>
+                <div class="candle"></div>
+                <div class="eye"></div>
+                <div class="eye eye-2"></div>
+                <div class="mouth"></div>
+            </div>
+        </div>
+        <div class="title">Exercise</div>
+        <div class="box">
+            <div class="grid" id="grid3"></div>
+            <div class="test">
+                <div class="shadows"></div>
+                <div class="main" data-index="0"></div>
+                <div class="details"></div>
+                <div class="candle"></div>
+                <div class="eye"></div>
+                <div class="eye eye-2"></div>
+                <div class="mouth"></div>
+            </div>
+        </div>
+        <div class="title">Sleep routine</div>
+        <div class="box">
+            <div class="grid" id="grid4"></div>
+            <div class="test">
+                <div class="shadows"></div>
+                <div class="main" data-index="0"></div>
+                <div class="details"></div>
+                <div class="candle"></div>
+                <div class="eye"></div>
+                <div class="eye eye-2"></div>
+                <div class="mouth"></div>
+            </div>
+        </div>
+        <div class="title">Reading</div>
+        <div class="box">
+            <div class="grid" id="grid5"></div>
+            <div class="test">
+                <div class="shadows"></div>
+                <div class="main" data-index="0"></div>
+                <div class="details"></div>
+                <div class="candle"></div>
+                <div class="eye"></div>
+                <div class="eye eye-2"></div>
+                <div class="mouth"></div>
+            </div>
+        </div>
+    </div>
+<script>
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    let gridStates = []; // Store grid states locally
+
+    // Function to fetch initial candle and grid states
+    function fetchInitialStates() {
+        return Promise.all([
+            fetch('/api/candle_states').then(response => response.json()),
+            fetch('/api/grid_states').then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+        ])
+        .then(([candleData, gridData]) => {
+            // Store grid states locally for easy access
+            gridStates = gridData.grid_states;
+
+            // Process each test element
+            document.querySelectorAll('.test').forEach(function(testElement) {
+                const mainElement = testElement.querySelector('.main');
+                const candleElement = testElement.querySelector('.candle');
+                const shadowsElement = testElement.querySelector('.shadows');
+                const mouthElement = testElement.querySelector('.mouth');
+                const gridId = testElement.parentElement.querySelector('.grid').id;
+
+                // Set initial candle state
+                const candleState = candleData.candle_states.find(candle => candle.id === gridId);
+                if (candleState && candleState.is_lit) {
+                    candleElement.classList.add('lit');
+                    shadowsElement.classList.add('lit');
+                    mouthElement.classList.add('happy');
+                }
+
+                // Set initial grid state
+                const gridState = gridStates.find(grid => grid.id === gridId);
+                if (gridState) {
+                    const coloredCells = gridState.colored_cells;
+                    const gridElement = testElement.parentElement.querySelector('.grid');
+                    const cells = gridElement.querySelectorAll('.cell');
+                    for (let i = 0; i < coloredCells; i++) {
+                        if (cells[i]) {
+                            cells[i].style.backgroundColor = 'gold';
+                        }
+                    }
+                }
+
+                // Handle click event on main element
+                mainElement.addEventListener('click', function() {
+                    var isLit = candleElement.classList.contains('lit');
+                    if (!isLit) {
+                        candleElement.classList.add('lit');
+                        shadowsElement.classList.add('lit');
+                        mouthElement.classList.add('happy');
+
+                        // Change background color of next uncolored cell
+                        var gridElement = testElement.parentElement.querySelector('.grid');
+                        var cells = gridElement.querySelectorAll('.cell');
+                        var nextCellIndex = gridState ? gridState.colored_cells : 0;
+
+                        if (nextCellIndex < cells.length) {
+                            cells[nextCellIndex].style.backgroundColor = 'gold';
+                        }
+
+                        // Immediately update UI
+                        if (gridState) {
+                            gridState.colored_cells = nextCellIndex + 1;
+                        } else {
+                            gridStates.push({ id: gridId, colored_cells: nextCellIndex + 1 });
+                        }
+
+                        // Update server state for candle
+                        fetch('/api/update_candle', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: gridId,
+                                is_lit: true
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to update candle state');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Update local grid state after successful update
+                            if (gridState) {
+                                gridState.colored_cells = nextCellIndex + 1;
+                            } else {
+                                gridStates.push({ id: gridId, colored_cells: nextCellIndex + 1 });
+                            }
+
+                            // Update the server state for grid after candle update
+                            fetch('/api/update_grid', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    id: gridId,
+                                    colored_cells: nextCellIndex + 1
+                                })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Failed to update grid state');
+                                }
+                                return response.json();
+                            })
+                            .catch(error => console.error('Error updating grid:', error));
+                        })
+                        .catch(error => console.error('Error updating candle:', error));
+                    }
+                    toggleGridOpacity(testElement.parentElement);
+                });
+                // Toggle grid opacity
+            toggleGridOpacity(testElement.parentElement);
+            });
+        })
+        .catch(error => console.error('Error fetching initial states:', error));
+    }
+
+    // Fetch initial states when DOM content is loaded
+    fetchInitialStates();
+
+
+    // Create grid cells when DOM content is loaded
+    createDivs();
+});
+
+    // Function to create grid cells
+    function createDivs() {
+        const grids = document.querySelectorAll('.grid');
+        grids.forEach((grid) => {
+            for (let i = 0; i < 100; i++) {
+                const div = document.createElement('div');
+                div.className = 'cell';
+                grid.appendChild(div);
+            }
+        });
+    }
+
+// Function to toggle grid opacity
+function toggleGridOpacity(boxElement) {
+    // Find the .grid within the .box
+    var gridElement = boxElement.querySelector('.grid');
+
+    // Find the .candle within the .box
+    var candleElement = boxElement.querySelector('.candle');
+
+    // Check if the .candle has the 'lit' class
+    if (candleElement.classList.contains('lit')) {
+        // If the .candle is 'lit', set the .grid opacity to 1
+        gridElement.style.opacity = '1';
+    } else {
+        // If the .candle is not 'lit', set the .grid opacity to 0.02
+        gridElement.style.opacity = '0.02';
+    }
+}
+
+
+
+    </script>
+
+
+</body>
+
+</html>
