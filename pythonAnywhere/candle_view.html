@@ -34,7 +34,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(10, 3vw);
+            grid-template-columns: repeat(10, 4vw);
             gap: 0.2em;
             opacity: 0.02;
         }
@@ -59,6 +59,47 @@
             margin-bottom: -2.5em;
             color: #EEEBDD;
         }
+
+        .speech {
+            font-size: 1.2em;
+            color: #222;
+            background: #EEEBDD;
+            font-family: 'Herculanum LT Pro', sans-serif;
+            border-radius: 10px;
+            padding: 0.5em;
+            height: fit-content;
+            top: 45%;
+            left: 65%;
+            user-select: none;
+        }
+
+        .speech::after {
+            display: block;
+            width: 0;
+            content: "";
+            border: 10px solid transparent;
+        }
+
+        .speech.left::after {
+            border-right-color: #EEEBDD;
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: #EEEBDD transparent;
+            /* border-radius: 0 0 1px 20px; */
+        }
+
+        .speech {
+            position: relative;
+        }
+
+        .speech::after {
+            position: absolute;
+        }
+
+        .speech.left::after {
+            left: -8px;
+            top: calc(50% - 5px);
+        }
     </style>
 </head>
 
@@ -76,6 +117,7 @@
                 <div class="eye"></div>
                 <div class="eye eye-2"></div>
                 <div class="mouth"></div>
+                <div class="speech left">日本語</div>
             </div>
         </div>
         <div class="title">Stretching</div>
@@ -131,101 +173,101 @@
             </div>
         </div>
     </div>
-<script>
+    <script>
 
 
-let path = 'https://483d8b.pythonanywhere.com'
+        let path = 'https://483d8b.pythonanywhere.com'
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    let gridStates = []; // Store grid states locally
+        window.addEventListener('DOMContentLoaded', (event) => {
+            let gridStates = []; // Store grid states locally
 
-    // Function to fetch initial candle and grid states
-    function fetchInitialStates() {
-        return Promise.all([
-            fetch(path+'/api/candle_states').then(response => response.json()),
-            fetch(path+'/api/grid_states').then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-        ])
-        .then(([candleData, gridData]) => {
-            // Store grid states locally for easy access
-            gridStates = gridData.grid_states;
-
-            // Process each test element
-            document.querySelectorAll('.test').forEach(function(testElement) {
-                const mainElement = testElement.querySelector('.main');
-                const candleElement = testElement.querySelector('.candle');
-                const shadowsElement = testElement.querySelector('.shadows');
-                const mouthElement = testElement.querySelector('.mouth');
-                const gridId = testElement.parentElement.querySelector('.grid').id;
-
-                // Set initial candle state
-                const candleState = candleData.candle_states.find(candle => candle.id === gridId);
-                if (candleState && candleState.is_lit) {
-                    candleElement.classList.add('lit');
-                    shadowsElement.classList.add('lit');
-                    mouthElement.classList.add('happy');
-                }
-
-                // Set initial grid state
-                const gridState = gridStates.find(grid => grid.id === gridId);
-                if (gridState) {
-                    const coloredCells = gridState.colored_cells;
-                    const gridElement = testElement.parentElement.querySelector('.grid');
-                    const cells = gridElement.querySelectorAll('.cell');
-                    for (let i = 0; i < coloredCells; i++) {
-                        if (cells[i]) {
-                            cells[i].style.backgroundColor = '#F08000';
+            // Function to fetch initial candle and grid states
+            function fetchInitialStates() {
+                return Promise.all([
+                    fetch(path + '/api/candle_states').then(response => response.json()),
+                    fetch(path + '/api/grid_states').then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
                         }
-                    }
+                        return response.json();
+                    })
+                ])
+                    .then(([candleData, gridData]) => {
+                        // Store grid states locally for easy access
+                        gridStates = gridData.grid_states;
+
+                        // Process each test element
+                        document.querySelectorAll('.test').forEach(function (testElement) {
+                            const mainElement = testElement.querySelector('.main');
+                            const candleElement = testElement.querySelector('.candle');
+                            const shadowsElement = testElement.querySelector('.shadows');
+                            const mouthElement = testElement.querySelector('.mouth');
+                            const gridId = testElement.parentElement.querySelector('.grid').id;
+
+                            // Set initial candle state
+                            const candleState = candleData.candle_states.find(candle => candle.id === gridId);
+                            if (candleState && candleState.is_lit) {
+                                candleElement.classList.add('lit');
+                                shadowsElement.classList.add('lit');
+                                mouthElement.classList.add('happy');
+                            }
+
+                            // Set initial grid state
+                            const gridState = gridStates.find(grid => grid.id === gridId);
+                            if (gridState) {
+                                const coloredCells = gridState.colored_cells;
+                                const gridElement = testElement.parentElement.querySelector('.grid');
+                                const cells = gridElement.querySelectorAll('.cell');
+                                for (let i = 0; i < coloredCells; i++) {
+                                    if (cells[i]) {
+                                        cells[i].style.backgroundColor = '#F08000';
+                                    }
+                                }
+                            }
+
+                            // Toggle grid opacity
+                            toggleGridOpacity(testElement.parentElement);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching initial states:', error));
+            }
+
+            // Fetch initial states when DOM content is loaded
+            fetchInitialStates();
+
+            // Create grid cells when DOM content is loaded
+            createDivs();
+        });
+
+        // Function to create grid cells
+        function createDivs() {
+            const grids = document.querySelectorAll('.grid');
+            grids.forEach((grid) => {
+                for (let i = 0; i < 100; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'cell';
+                    grid.appendChild(div);
                 }
-
-                // Toggle grid opacity
-                toggleGridOpacity(testElement.parentElement);
             });
-        })
-        .catch(error => console.error('Error fetching initial states:', error));
-    }
-
-    // Fetch initial states when DOM content is loaded
-    fetchInitialStates();
-
-    // Create grid cells when DOM content is loaded
-    createDivs();
-});
-
-// Function to create grid cells
-function createDivs() {
-    const grids = document.querySelectorAll('.grid');
-    grids.forEach((grid) => {
-        for (let i = 0; i < 100; i++) {
-            const div = document.createElement('div');
-            div.className = 'cell';
-            grid.appendChild(div);
         }
-    });
-}
 
-// Function to toggle grid opacity
-function toggleGridOpacity(boxElement) {
-    // Find the .grid within the .box
-    var gridElement = boxElement.querySelector('.grid');
+        // Function to toggle grid opacity
+        function toggleGridOpacity(boxElement) {
+            // Find the .grid within the .box
+            var gridElement = boxElement.querySelector('.grid');
 
-    // Find the .candle within the .box
-    var candleElement = boxElement.querySelector('.candle');
+            // Find the .candle within the .box
+            var candleElement = boxElement.querySelector('.candle');
 
-    // Check if the .candle has the 'lit' class
-    if (candleElement.classList.contains('lit')) {
-        // If the .candle is 'lit', set the .grid opacity to 1
-        gridElement.style.opacity = '1';
-    } else {
-        // If the .candle is not 'lit', set the .grid opacity to 0.02
-        gridElement.style.opacity = '0.02';
-    }
-}
+            // Check if the .candle has the 'lit' class
+            if (candleElement.classList.contains('lit')) {
+                // If the .candle is 'lit', set the .grid opacity to 1
+                gridElement.style.opacity = '1';
+            } else {
+                // If the .candle is not 'lit', set the .grid opacity to 0.02
+                gridElement.style.opacity = '0.02';
+            }
+        }
 
     </script>
 
