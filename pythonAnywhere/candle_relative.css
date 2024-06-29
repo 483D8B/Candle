@@ -1,3 +1,27 @@
+:root {
+    --O_color1: #9bb0ff;
+    --O_color2: #7289d5;
+    --O_color3: #4965ac;
+    --O_shadow: rgba(172, 192, 255, 0.2);
+
+    --F_color1: #f8f7ff;
+    --F_color2: #c1c0c8;
+    --F_color3: #8d8c93;
+    --F_shadow: rgba(225, 224, 232, 0.2);
+
+    --original_color1: #FFE194;
+    --original_color2: #FFB319;
+    --original_color3: #F88F01;
+    --original_shadow: rgba(255, 239, 161, 0.2);
+
+    --green_color1: #86a985;
+    --green_color2: #698b68;
+    --green_color3: #4d6e4d;
+    --green_shadow: rgba(216, 254, 215, 0.2);
+
+}
+
+
 .main {
     position: absolute;
     width: 60px;
@@ -61,7 +85,7 @@
     height: 15px;
     border-radius: 0 50% 50%;
     transform: rotate(45deg);
-    background: #FFE194;
+    background: var(--original_color1);
     left: calc(10% - 7.5px);
     top: calc(50% - 65px);
     box-shadow: none;
@@ -72,12 +96,12 @@
 
 .candle.lit {
     box-shadow: none;
-    box-shadow: -6px -6px 0 10px #FFB319, -14px -14px 0 20px #F88F01, -8px -28px 0 20px rgba(0, 0, 0, 0.1);
-    background: #FFE194;
+    box-shadow: -6px -6px 0 10px var(--original_color2), -14px -14px 0 20px var(--original_color3), -8px -28px 0 20px rgba(0, 0, 0, 0.1);
+    background: var(--original_color1);
 }
 
 .shadows.lit::after {
-    --after-background: rgba(255, 239, 161, 0.2);
+    --after-background: var(--original_shadow);
 }
 
 
@@ -139,6 +163,17 @@
     border-radius: 50%;
     background: black;
 }
+
+/* .eye::after {
+    content: '';
+    position: absolute;
+    margin: auto;
+    width: 100px;
+    height: 8px;
+    left: 0;
+    border-radius: 50%;
+    background: black;
+} */
 
 .mouth::before {
     content: '';

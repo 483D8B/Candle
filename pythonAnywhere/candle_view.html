@@ -35,7 +35,7 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(10, 3vw);
-            gap: 0.5em;
+            gap: 0.2em;
             opacity: 0.02;
         }
 
@@ -178,7 +178,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     const cells = gridElement.querySelectorAll('.cell');
                     for (let i = 0; i < coloredCells; i++) {
                         if (cells[i]) {
-                            cells[i].style.backgroundColor = 'gold';
+                            cells[i].style.backgroundColor = '#F08000';
                         }
                     }
                 }
