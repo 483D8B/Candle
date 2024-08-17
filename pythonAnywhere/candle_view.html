@@ -173,10 +173,57 @@
             }
 
             // Fetch initial states when DOM content is loaded
-            fetchInitialStates();
+            //fetchInitialStates();
 
             // Create grid cells when DOM content is loaded
             createDivs();
+
+            // Function to add class to elements
+            function addClassToElements(className, extClassName, armClassName) {
+                const elements = ['.main', '.eye', '.eye-2'];
+                elements.forEach(selector => {
+                    const nodeList = document.querySelectorAll(selector);
+                    nodeList.forEach(element => {
+                        element.classList.add(className);
+                    });
+                });
+
+                const detailsElements = document.querySelectorAll('.details');
+                detailsElements.forEach(element => {
+                    element.classList.add(extClassName);
+                });
+
+                if (armClassName) {
+                    // Add 'armClassName' class to '.main.stretch', '.main.muscle', and '.main.read' elements
+                    const armElements = document.querySelectorAll('.main.stretch, .main.muscle, .main.read');
+                    armElements.forEach(element => {
+                        element.classList.add(armClassName);
+                    });
+                }
+            }
+
+            // Add the festiveMiddle class if today is within the Christmas period
+            if (isChristmasPeriod()) {
+                addClassToElements('festive', 'festiveExtremities', 'festiveArm');
+            }
+
+            // Add the weekend class if today is a weekend and it's not the Christmas period
+            if (isWeekend() && !isChristmasPeriod()) {
+                addClassToElements('weekend', 'weekendExtremities', 'weekendArm');
+            }
+
+
+            // Add the festiveMiddle class if today is within the Christmas period
+            if (isChristmasPeriod()) {
+                addClassToElements('festive', 'festiveExtremities', 'festiveArm');
+            }
+
+            // Add the weekend class if today is a weekend and it's not the Christmas period
+            if (isWeekend() && !isChristmasPeriod()) {
+                addClassToElements('weekend', 'weekendExtremities', 'weekendArm');
+            }
+
+
         });
 
         // Function to create grid cells
@@ -208,6 +255,30 @@
                 gridElement.style.opacity = '0.02';
             }
         }
+
+        // Function to check if today is within the Christmas period
+        function isChristmasPeriod() {
+            const today = new Date();
+            const month = today.getMonth(); // 0 is January, 11 is December
+            const date = today.getDate(); // 1 to 31
+
+            // Check if the date is between December 1st and January 6th
+            return (month === 11 && date >= 1) || (month === 0 && date <= 6);
+        }
+
+        // Function to check if today is a weekend
+        function isWeekend() {
+            const today = new Date();
+            const day = today.getDay(); // 0 is Sunday, 6 is Saturday
+
+            // Check if the day is Saturday or Sunday
+            return day === 0 || day === 6;
+            //return 1;
+        }
+
+
+
+
 
     </script>
 

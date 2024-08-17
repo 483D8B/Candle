@@ -629,6 +629,20 @@ a {
 .main.muscle::before {
     content: '';
     position: absolute;
+    border-radius: 5px;
+    width: 80px;
+    height: 40px;
+    top: 60px;
+    outline: 15px solid #EEEBDD;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50% 50% 45% 55% / 5% 5% 80% 80% ;
+}
+
+
+/* .main.muscle::before {
+    content: '';
+    position: absolute;
     border: 8px solid #EEEBDD;
     border-radius: 5px;
     width: 100px;
@@ -637,6 +651,7 @@ a {
     top: 55px;
     border-top: transparent;
 }
+    
 
 .main.muscle::after {
     content: '';
@@ -652,7 +667,7 @@ a {
     border-radius: 50% 50% 0 0;
     animation: swing 1500ms infinite linear;
     transform-origin: bottom;
-}
+} */
 
 .main.read::before {
     content: '';
@@ -868,4 +883,45 @@ a {
     to {
         opacity: 0;
     }
+}
+
+.festive {
+    background: #BC4749;
+}
+
+.festiveExtremities {
+    background: radial-gradient(20px 10px at 50% 50%, #96383a 50%, #a93f41 50%);
+    box-shadow: 0 120px 0 0 #BC4749;
+}
+
+.weekend {
+    background: #44355B;
+}
+
+.festiveArm{
+    border: 8px solid #BC4749;
+}
+
+
+.weekendExtremities {
+    background: radial-gradient(20px 10px at 50% 50%, #362a48 50%, #3d2f51 50%);
+    box-shadow: 0 120px 0 0 #44355B;
+}
+
+.main.stretch.festiveArm::before {
+    border: 8px solid #BC4749; /* festiveArm border color */
+}
+
+.main.stretch.weekendArm::before {
+    border: 8px solid #44355B; /* weekendArm border color */
+    border-top: transparent;
+}
+
+
+.main.muscle.weekendArm::before{
+    outline: 15px solid #44355b;
+}
+
+.main.read.weekendArm::before{
+    border: 7px solid #44355b;
 }
